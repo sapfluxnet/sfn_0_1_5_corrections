@@ -8,6 +8,12 @@ Zenodo.
 writes a new version of the database (0.1.6, RData files) in an output folder.
 * sfn_0_1_5_csvs.R: writes RData files to csv folder and fixes issues with 
 timezones in csv files
+* sfn_0_1_6_checks.R: miscellaneous data checks of the corrected version.
+
+## Output
+
+The code produces a new version stored in the folder output/0.1.6. It has the same
+structure as the database in Zenodo.
 
 ## Changelog
 
