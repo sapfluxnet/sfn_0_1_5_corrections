@@ -17,16 +17,13 @@ of the SFN version that is updating. In my filesystem:
 
 ```
 SAPFLUXNET
-│
 └───DataVersions
-│   │
 │   └──0.1.5
-│   │     csv
-│   │     RData
-│   │
-│   └──sfn_0_1_5_corrections
-│        │
-│        └──output
+│       │ csv
+│       │ RData
+│       └─sfn_0_1_5_corrections
+│          │
+│          └──output
 │             │
 │             └─0.1.6
 │                 │
