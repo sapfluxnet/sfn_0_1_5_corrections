@@ -10,6 +10,30 @@ writes a new version of the database (0.1.6, RData files) in an output folder.
 timezones in csv files
 * sfn_0_1_6_checks.R: miscellaneous data checks of the corrected version.
 
+## Implementation
+
+This implementation assumes that the current project folder is at the same level
+of the SFN version that is updating. In my filesystem:
+
+```
+SAPFLUXNET
+│
+└───DataVersions
+│   │
+│   └──0.1.5
+│   │     csv
+│   │     RData
+│   │
+│   └──sfn_0_1_5_corrections
+│        │
+│        └──output
+│             │
+│             └─0.1.6
+│                 │
+│                 └─ csv
+|                  └─ RData
+```
+
 ## Output
 
 The code produces a new version stored in the folder output/0.1.6. It has the same
