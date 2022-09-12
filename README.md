@@ -31,13 +31,18 @@ SAPFLUXNET
 │             └─0.1.6
 │                 │
 │                 └─ csv
-|                  └─ RData
+|                 └─ RData
 ```
 
 ## Output
 
-The code produces a new version stored in the folder output/0.1.6. It has the same
+The code produces a new version stored in the folder 
+output/0.1.6. It has the same
 structure as the database in Zenodo.
+
+Once updated version is finalised and checked, it can be copied to 
+the DataVersions directory as 0.1.6 and can be used in 
+further analyses.
 
 ## Changelog
 

@@ -32,11 +32,27 @@ sfn_metadata_leaf <- read_sfn_metadata(folder =  sfn_RData_leaf,
 
 # 0.1.6. Create metadata cache
 sfn_metadata_plant_0.1.6 <- read_sfn_metadata(folder = out_plant, 
-                                              .write_cache = FALSE)
+                                              .write_cache = TRUE)
 sfn_metadata_sapwood_0.1.6 <- read_sfn_metadata(folder =  out_sapwood, 
-                                                .write_cache = FALSE)
+                                                .write_cache = TRUE)
 sfn_metadata_leaf_0.1.6 <- read_sfn_metadata(folder =  out_leaf, 
-                                                .write_cache = FALSE)
+                                                .write_cache = TRUE)
+
+# Read data 0.1.6 ---------------------------------------------------------
+
+
+# plant
+sfn_plant_data_0.1.6 <- read_sfn_data(sfn_metadata_plant_0.1.6[['site_md']]$si_code,
+                                folder=out_plant)
+
+# plant
+sfn_sapwood_data_0.1.6 <- read_sfn_data(sfn_metadata_sapwood_0.1.6[['site_md']]$si_code,
+                                  folder=out_plant)
+
+# leaf
+sfn_leaf_data_0.1.6 <- read_sfn_data(sfn_metadata_leaf_0.1.6[['site_md']]$si_code,
+                               folder=out_plant)
+
 
 # Check coordinates changes in USA_DUK_HAR
 
@@ -54,16 +70,71 @@ sfn_metadata_plant[['env_md']] %>%
   left_join(select(sfn_metadata_plant_0.1.6[['env_md']], si_code,env_time_zone)) %>% View()
 
 
-get_timezone(read_sfn_data('FRA_PUE',out_plant))
-get_timezone(read_sfn_data('ESP_CAN',out_plant))
+# get_timezone(read_sfn_data('FRA_PUE',out_plant))
+# get_timezone(read_sfn_data('ESP_CAN',out_plant))
 
-get_timestamp(read_sfn_data('ESP_CAN',out_plant)) %>% lubridate::tz()
-get_timestamp(read_sfn_data('FRA_PUE',out_plant)) %>% lubridate::tz()
+
+# Get timezones from metadata using get_timezone  -------------------------
+
+# tz_md
+sfn_plant_0.1.6_tz1 <- sfn_plant_data_0.1.6 %>% 
+imap(~get_timezone(.x)) %>% 
+  imap_dfr(~bind_cols(si_code=.y,tz_md=.x)) 
+
+sfn_sapwood_0.1.6_tz1 <- sfn_sapwood_data_0.1.6 %>% 
+  imap(~get_timezone(.x)) %>% 
+  imap_dfr(~bind_cols(si_code=.y,tz_md=.x)) 
+
+sfn_leaf_0.1.6_tz1 <- sfn_leaf_data_0.1.6 %>% 
+  imap(~get_timezone(.x)) %>% 
+  imap_dfr(~bind_cols(si_code=.y,tz_md=.x)) 
+
+
+# Get timezones from time series using get_timestamp ----------------------
+
+
+# get_timestamp(read_sfn_data('ESP_CAN',out_plant)) %>% lubridate::tz()
+# get_timestamp(read_sfn_data('FRA_PUE',out_plant)) %>% lubridate::tz()
+
+# tz_ts
+sfn_plant_0.1.6_tz2 <- sfn_plant_data_0.1.6 %>% 
+  imap(~lubridate::tz(get_timestamp(.x))) %>% 
+  imap_dfr(~bind_cols(tz_ts=.x,si_code=.y)) 
+
+sfn_sapwood_0.1.6_tz2 <- sfn_sapwood_data_0.1.6 %>% 
+  imap(~lubridate::tz(get_timestamp(.x))) %>% 
+  imap_dfr(~bind_cols(tz_ts=.x,si_code=.y)) 
+
+sfn_leaf_0.1.6_tz2 <- sfn_leaf_data_0.1.6 %>% 
+  imap(~get_timezone(.x)) %>% 
+  imap_dfr(~bind_cols(tz_ts=.x,si_code=.y)) 
+
+
+# Combine -----------------------------------------------------------------
+
+sfn_plant_0.1.6_tz1 %>% 
+  bind_cols(select(sfn_plant_0.1.6_tz2,-si_code)) %>% View()
+
+# Function to replace metadata tz by ts tz --------------------------------
+
+
+
+tzts_to_tzmd<- function(sfn_object)
+  {
+  if(is.null(get_timezone(sfn_object))){
+    get_timezone(sfn_object) <- lubridate::tz(get_timestamp(sfn_object))
+  } else {
+    message(paste0('Time zone present ',get_timezone(sfn_object)))
+  }
+  
+}
+
+tzts_to_tzmd(sfn_plant_data_0.1.6[['ESP_CAN']])
 
 # TODO generalize for all data to check timestamps
 
 tictoc::tic()
-get_timestamp(read_sfn_data('FRA_PUE',out_plant)) %>% lubridate::tz()
+get_timestamp(read_sfn_data('ESP_CAN',out_plant)) %>% lubridate::tz()
 tictoc::toc()
 
 
