@@ -269,6 +269,39 @@ get_species_md(sfn_plant_data[['RUS_POG_VAR']]) <-
     TRUE ~ sp_name))
 
 
+# Environmental metadata --------------------------------------------------
+
+# CAN_TUR* ----------------------------------------------------------------
+
+# plant
+
+get_env_md(sfn_plant_data[['CAN_TUR_P39_POS']])$env_time_zone <- '9UTC-05:00, R'
+get_env_md(sfn_plant_data[['CAN_TUR_P39_PRE']])$env_time_zone <- '9UTC-05:00, R'
+get_env_md(sfn_plant_data[['CAN_TUR_P74']])$env_time_zone <- '9UTC-05:00, R'
+
+# sapwood
+
+get_env_md(sfn_sapwood_data[['CAN_TUR_P39_POS']])$env_time_zone <- '9UTC-05:00, R'
+get_env_md(sfn_sapwood_data[['CAN_TUR_P39_PRE']])$env_time_zone <- '9UTC-05:00, R'
+get_env_md(sfn_sapwood_data[['CAN_TUR_P74']])$env_time_zone <- '9UTC-05:00, R'
+
+
+
+# ESP_TIL_OAK -------------------------------------------------------------
+
+get_env_md(sfn_plant_data[['ESP_TIL_OAK']])$env_time_zone  <- "16UTC±00:00, Z"
+get_env_md(sfn_sapwood_data[['ESP_TIL_OAK']])$env_time_zone  <- "16UTC±00:00, Z"
+get_env_md(sfn_leaf_data[['ESP_TIL_OAK']])$env_time_zone  <- "16UTC±00:00, Z"
+
+
+get_timestamp(sfn_plant_data[['ESP_TIL_OAK']]) <- get_timestamp(
+  sfn_plant_data[['ESP_TIL_OAK']]) %>% lubridate::force_tz("Etc/GMT+0")
+get_timestamp(sfn_sapwood_data[['ESP_TIL_OAK']]) <- get_timestamp(
+  sfn_sapwood_data[['ESP_TIL_OAK']]) %>% lubridate::force_tz("Etc/GMT+0")
+get_timestamp(sfn_leaf_data[['ESP_TIL_OAK']]) <- get_timestamp(
+  sfn_leaf_data[['ESP_TIL_OAK']]) %>% lubridate::force_tz("Etc/GMT+0")
+
+
 # Plant metadata ----------------------------------------------------------
 
 #  Species issues ---------------------------------------------------------
