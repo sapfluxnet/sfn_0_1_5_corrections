@@ -111,6 +111,8 @@ sfn_leaf_data <- read_sfn_data(sfn_leaf_sites$si_code,
 # # all
 # sfn_all_data<- c(sfn_plant_data,sfn_sw_data)
 
+# Check bad solar timestamps
+
 
 # 4. Site metadata -----------------------------------------------------------
 
@@ -289,6 +291,8 @@ get_env_md(sfn_sapwood_data[['CAN_TUR_P74']])$env_time_zone <- '9UTC-05:00, R'
 
 # ESP_TIL_OAK -------------------------------------------------------------
 
+# Time zones
+
 get_env_md(sfn_plant_data[['ESP_TIL_OAK']])$env_time_zone  <- "16UTC±00:00, Z"
 get_env_md(sfn_sapwood_data[['ESP_TIL_OAK']])$env_time_zone  <- "16UTC±00:00, Z"
 get_env_md(sfn_leaf_data[['ESP_TIL_OAK']])$env_time_zone  <- "16UTC±00:00, Z"
@@ -301,6 +305,63 @@ get_timestamp(sfn_sapwood_data[['ESP_TIL_OAK']]) <- get_timestamp(
 get_timestamp(sfn_leaf_data[['ESP_TIL_OAK']]) <- get_timestamp(
   sfn_leaf_data[['ESP_TIL_OAK']]) %>% lubridate::force_tz("Etc/GMT+0")
 
+
+# Solar timestamps --------------------------------------------------------
+
+set_solar_tz<- function(sfn_obj){
+  solar_time <- get_solar_timestamp(sfn_obj)
+  lubridate::tz(solar_time) <- "UTC"
+  get_solar_timestamp(sfn_obj) <- solar_time
+  return(sfn_obj)
+  
+}
+
+# Plant
+tz_solar_res <- sapply(
+  sfn_plant_data,
+  function(x) lubridate::tz(get_solar_timestamp(x)))  
+
+solar_to_fix<- tz_solar_res[which(tz_solar_res=='')] %>% names
+
+# Fix
+plant_solar_fixed <- purrr::map(sfn_plant_data[solar_to_fix],
+           ~set_solar_tz(.x))
+
+# Sapwood
+tz_solar_res_sw <- sapply(
+  sfn_sapwood_data,
+  function(x) lubridate::tz(get_solar_timestamp(x)))  
+
+solar_to_fix_sw<- tz_solar_res_sw[which(tz_solar_res_sw=='')] %>% names
+
+# Fix
+plant_solar_fixed_sw <- purrr::map(sfn_sapwood_data[solar_to_fix_sw],
+                                ~set_solar_tz(.x))
+
+# Leaf
+tz_solar_res_lf <- sapply(
+  sfn_leaf_data,
+  function(x) lubridate::tz(get_solar_timestamp(x)))  
+
+solar_to_fix_lf<- tz_solar_res_lf[which(tz_solar_res_lf=='')] %>% names
+
+# Fix
+plant_solar_fixed_lf <- purrr::map(sfn_leaf_data[solar_to_fix_lf],
+                                   ~set_solar_tz(.x))
+
+
+# Replace sites with solar timestamps fixed in original lists
+sfn_plant_data<- modifyList(sfn_plant_data,plant_solar_fixed)
+
+sfn_sapwood_data<- modifyList(sfn_sapwood_data,plant_solar_fixed_sw)
+
+sfn_leaf_data<- modifyList(sfn_leaf_data,plant_solar_fixed_lf)
+
+# Remove intermediate objects
+rm(plant_solar_fixed,plant_solar_fixed_sw,plant_solar_fixed_lf)
+
+# TODO: check IDN_PON_STE when saving sapwood object not found!
+# It's present in 0.1.5 sapwood
 
 # Plant metadata ----------------------------------------------------------
 

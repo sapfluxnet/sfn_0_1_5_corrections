@@ -116,3 +116,7 @@ sfn_plant_0.1.6_tz1 %>%
   bind_cols(select(sfn_plant_0.1.6_tz2,-si_code)) %>% View()
 
 
+# Check solar timestamps --------------------------------------------------
+
+sfn_plant_data_0.1.6 %>% 
+  get_solar_timestamp() %>% lubridate::tz()
