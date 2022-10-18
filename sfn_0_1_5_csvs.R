@@ -61,7 +61,7 @@ out_leaf_csv<- file.path('output/0.1.6/csv/leaf')
 
 
 if(!dir.exists(out_plant_csv)){
-  dir.create(out_plant,recursive=TRUE)
+  dir.create(out_plant_csv,recursive=TRUE)
 } else{
   message('Folder already exists') 
 }
@@ -88,7 +88,7 @@ leaf_lapply <- lapply(leaf_si_codes, sfn2csv, where= out_leaf, folder = out_leaf
 sapwood_si_codes <- list.files(out_sapwood, '.RData') %>% stringr::str_remove('.RData')
 sapwood_lapply <- lapply(sapwood_si_codes, sfn2csv, where = out_sapwood, folder = out_sapwood_csv)
 
-plant_si_codes <- list.files(plant_folder, '.RData') %>% stringr::str_remove('.RData')
+plant_si_codes <- list.files(out_plant, '.RData') %>% stringr::str_remove('.RData')
 plant_lapply <- lapply(plant_si_codes, sfn2csv, where = out_plant, folder = out_plant_csv)
 
 # 4. Fix timezones in csv's -----------------------------------------------
