@@ -454,15 +454,20 @@ get_plant_md(sfn_plant_data[['RUS_POG_VAR']]) <-
 
 # Environmental data ------------------------------------------------------
 
+# ESP_LAS -----------------------------------------------------------------
+
 
 # Recalculate VPDs from ta and RH because there was a jump in the 
 # time series with values too high
 
-get_env_data(sfn_plant_data[['ESP_LAS']])$vpd<- sapfluxnetQC1::qc_vpd(
-  data=tibble(ta=get_env_data(sfn_plant_data[['ESP_LAS']])$ta,
-              rh=get_env_data(sfn_plant_data[['ESP_LAS']])$rh)
-)
+get_env_data(sfn_plant_data[['ESP_LAS']])<- 
+  get_env_data(sfn_plant_data[['ESP_LAS']]) %>% 
+  select(-TIMESTAMP) %>% 
+  mutate(vpd=sapfluxnetQC1::qc_vpd(
+    data=tibble(ta=get_env_data(sfn_plant_data[['ESP_LAS']])$ta,
+                rh=get_env_data(sfn_plant_data[['ESP_LAS']])$rh))$vpd) 
 
+get_env_data(sfn_plant_data[['ESP_LAS']]) %>% pull(vpd) %>% summary
 
 
 #  Other issues -----------------------------------------------------------

@@ -150,9 +150,9 @@ USA_SIL_OAK_2PR %>% get_site_md() %>% View
 
 ESP_LAS <- read_sfn_data("ESP_LAS",
                                  folder=out_plant)
+ESP_LAS@env_data %>% names
 
-
-ESP_LAS %>% sfn_plot(type='vpd')
+ESP_LAS %>% sfn_plot(type='env')
 
 sapfluxnetQC1::qc_vpd(
 data=tibble(ta=get_env_data(ESP_LAS)$ta,
