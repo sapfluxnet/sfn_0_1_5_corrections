@@ -120,3 +120,45 @@ sfn_plant_0.1.6_tz1 %>%
 
 sfn_plant_data_0.1.6 %>% 
   get_solar_timestamp() %>% lubridate::tz()
+
+
+# Individual checks -------------------------------------------------------
+
+
+# USA_SIL_OAK -------------------------------------------------------------
+
+
+USA_SIL_OAK_2PR <- read_sfn_data("USA_SIL_OAK_2PR",
+              folder=out_plant)
+
+# Values of Jt are too low
+
+USA_SIL_OAK_1PR <- read_sfn_data("USA_SIL_OAK_1PR",
+                                 folder=out_plant)
+
+USA_SIL_OAK_2PR %>% sfn_plot(type='sapf')
+USA_SIL_OAK_1PR %>% sfn_plot(type='sapf')
+
+USA_SIL_OAK_2PR %>% get_stand_md() %>% View
+
+USA_SIL_OAK_2PR %>% get_plant_md() %>% View
+USA_SIL_OAK_2PR %>% get_site_md() %>% View
+
+
+# ESP_LAS -----------------------------------------------------------------
+
+
+ESP_LAS <- read_sfn_data("ESP_LAS",
+                                 folder=out_plant)
+
+
+ESP_LAS %>% sfn_plot(type='vpd')
+
+sapfluxnetQC1::qc_vpd(
+data=tibble(ta=get_env_data(ESP_LAS)$ta,
+       rh=get_env_data(ESP_LAS)$rh)
+) %>% pull(vpd) %>% plot()
+
+
+
+get_env_md(sfn_plant_data[['ESP_LAS']])$vpd

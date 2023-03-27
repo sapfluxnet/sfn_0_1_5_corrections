@@ -124,6 +124,12 @@ get_site_md(sfn_sapwood_data[['USA_DUK_HAR']])$si_lat <- 35.9736
 
 # 4. Stand metadata -------------------------------------------------------
 
+
+# ESP_RIN -----------------------------------------------------------------
+
+get_stand_md(sfn_all_data[['ESP_RIN']])$st_basal_area <- 27.46
+get_stand_md(sfn_sapwood_data[['ESP_RIN']])$st_basal_area <- 27.46
+
 # CHE_DAV_SEE -------------------------------------------------------------
 # Basal area reported by Roman: 45 m2 ha-1
 
@@ -445,6 +451,20 @@ get_plant_md(sfn_plant_data[['RUS_POG_VAR']]) <-
     TRUE ~ pl_species))
 
 
+
+# Environmental data ------------------------------------------------------
+
+
+# Recalculate VPDs from ta and RH because there was a jump in the 
+# time series with values too high
+
+get_env_data(sfn_plant_data[['ESP_LAS']])$vpd<- sapfluxnetQC1::qc_vpd(
+  data=tibble(ta=get_env_data(sfn_plant_data[['ESP_LAS']])$ta,
+              rh=get_env_data(sfn_plant_data[['ESP_LAS']])$rh)
+)
+
+
+
 #  Other issues -----------------------------------------------------------
 
 
@@ -582,8 +602,8 @@ get_sapf_data(
 
 # Summary: changed sites --------------------------------------------------
 
-si_change <- c('CHE_DAV_SEE','USA_MOR_SF','USA_SYL_HL1','USA_SYL_HL2',
-               'USA_CHE_MAP','CRI_TAM_TOW','GUF_GUY_GUY','IDN_PON_STE',
+si_change <- c('CHE_DAV_SEE','ESP_RIN','ESP_LAS','USA_MOR_SF','USA_SYL_HL1',
+               'USA_SYL_HL2', 'USA_CHE_MAP','CRI_TAM_TOW','GUF_GUY_GUY','IDN_PON_STE',
                'MDG_SEM_TAL','RUS_POG_VAR','AUS_WOM','THA_KU','NLD_SPE_DOU',
                'USA_DUK_HAR','COL_MAC_SAF_RAD')
 

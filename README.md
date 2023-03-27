@@ -45,3 +45,7 @@ further analyses.
 
 Changes to version 0.1.5 will be documented here soon. For now, have a look at 
 the comments in the sfn_0_1_5_corrections.R file.
+
+* 27032022 - Added ESP_RIN stand basal area correction, not present in earlier 0.1.6 versions.
+* 27032022 - Recalculated VPD in ESP_LAS based on ta and rh, as VPD supplied had a clear shift in the
+time series, making it reach unreasonably high values.
