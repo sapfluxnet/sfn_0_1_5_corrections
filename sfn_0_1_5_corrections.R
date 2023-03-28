@@ -127,7 +127,7 @@ get_site_md(sfn_sapwood_data[['USA_DUK_HAR']])$si_lat <- 35.9736
 
 # ESP_RIN -----------------------------------------------------------------
 
-get_stand_md(sfn_all_data[['ESP_RIN']])$st_basal_area <- 27.46
+get_stand_md(sfn_plant_data[['ESP_RIN']])$st_basal_area <- 27.46
 get_stand_md(sfn_sapwood_data[['ESP_RIN']])$st_basal_area <- 27.46
 
 # CHE_DAV_SEE -------------------------------------------------------------
